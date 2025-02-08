@@ -1,4 +1,6 @@
 How This Script Works
+This script reads from suno_urls.txt
+
 User Selection:
 When you run the script, you’re prompted to enter which items to extract and save. You can choose from:
 
