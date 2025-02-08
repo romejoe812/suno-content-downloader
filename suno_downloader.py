@@ -472,6 +472,20 @@ def main():
             failed_urls.add(url)
             continue
         
+        # MP4 extraction block added here.
+        if options["mp4"]:
+            video_meta = soup.find("meta", {"property": "og:video:url"})
+            video_url = video_meta.get("content") if video_meta else None
+            if video_url:
+                video_filepath = download_file(video_url, "Videos", f"{index_prefix}{sanitized_title}", "mp4")
+                if not video_filepath:
+                    record_failure(url, "Failed to download video")
+                    failed_urls.add(url)
+            else:
+                record_failure(url, "Video URL not found")
+                failed_urls.add(url)
+        
+        # MP3 extraction
         current_mp3_filepath = None
         if options["mp3"]:
             audio_meta = soup.find("meta", {"property": "og:audio"})
@@ -487,6 +501,7 @@ def main():
                 record_failure(url, "Audio URL not found")
                 failed_urls.add(url)
         
+        # Image extraction
         current_image_filepath = None
         if options["image"]:
             image_meta = soup.find("meta", {"name": "twitter:image"})
